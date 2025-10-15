@@ -1,1169 +1,316 @@
-<!DOCTYPE html>
-<html lang="en"
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GHOST WALA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Architects+Daughter&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --paper-bg: #f8f6f0;
-            --ink-dark: #2c2c2c;
-            --ink-medium: #4a4a4a;
-            --ink-light: #7a7a7a;
-            --sketch-border: #3a3a3a;
-            --highlight: #d4af37;
-            --shadow: rgba(0,0,0,0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Kalam', cursive;
-            background: var(--paper-bg);
-            background-image: 
-                linear-gradient(90deg, transparent 79px, rgba(0,0,0,0.05) 81px, transparent 82px),
-                linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
-            background-size: 82px 24px;
-            color: var(--ink-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .sketch-border {
-            border: 2px solid var(--sketch-border);
-            border-radius: 8px 12px 10px 6px;
-            position: relative;
-        }
-
-        .sketch-border::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border: 1px solid var(--sketch-border);
-            border-radius: 6px 10px 8px 4px;
-            opacity: 0.3;
-        }
-
-        .handwritten {
-            font-family: 'Architects Daughter', cursive;
-            transform: rotate(-0.5deg);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
-        .top-bar {
-            background: rgba(255,255,255,0.7);
-            padding: 8px 0;
-            border-bottom: 1px dashed var(--ink-light);
-            font-size: 14px;
-        }
-
-        .top-bar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .contact-info {
-            display: flex;
-            gap: 20px;
-            font-size: 13px;
-        }
-
-        .contact-info span {
-            position: relative;
-        }
-
-        .contact-info span::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--ink-light);
-            transform: scaleX(0.8) rotate(0.2deg);
-        }
-
-        .header {
-            padding: 20px 0;
-            background: rgba(255,255,255,0.5);
-            position: relative;
-        }
-
-        .header::before {
-            content: 'WEBSITE SKETCH';
-            position: absolute;
-            top: 5px;
-            right: 20px;
-            font-size: 10px;
-            color: var(--ink-light);
-            transform: rotate(2deg);
-            opacity: 0.6;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--ink-dark);
-            text-decoration: none;
-            position: relative;
-            transform: rotate(-1deg);
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: -5px;
-            right: -5px;
-            height: 3px;
-            background: var(--highlight);
-            border-radius: 50%;
-            opacity: 0.7;
-            transform: rotate(1deg);
-        }
-
-        .search-container {
-            flex: 1;
-            max-width: 400px;
-            position: relative;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: 2px solid var(--sketch-border);
-            border-radius: 25px 15px 25px 15px;
-            background: white;
-            font-family: 'Kalam', cursive;
-            font-size: 16px;
-            transform: rotate(0.3deg);
-        }
-
-        .search-btn {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-5deg);
-            background: var(--highlight);
-            border: 2px solid var(--sketch-border);
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cart-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .cart-icon {
-            position: relative;
-            padding: 10px;
-            border: 2px dashed var(--sketch-border);
-            border-radius: 8px;
-            cursor: pointer;
-            transform: rotate(-2deg);
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--highlight);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* Navigation */
-        .nav {
-            background: rgba(255,255,255,0.8);
-            padding: 15px 0;
-            border-top: 2px dashed var(--ink-light);
-            border-bottom: 2px dashed var(--ink-light);
-        }
-
-        .nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: var(--ink-dark);
-            font-size: 18px;
-            font-weight: 400;
-            position: relative;
-            padding: 8px 15px;
-            border-radius: 15px 8px 15px 8px;
-            transition: all 0.3s ease;
-            transform: rotate(var(--rotate, 0deg));
-        }
-
-        .nav a:nth-child(1) { --rotate: 0.5deg; }
-        .nav a:nth-child(2) { --rotate: -0.3deg; }
-        .nav a:nth-child(3) { --rotate: 0.2deg; }
-        .nav a:nth-child(4) { --rotate: -0.4deg; }
-        .nav a:nth-child(5) { --rotate: 0.6deg; }
-
-        .nav a:hover {
-            background: var(--highlight);
-            color: white;
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        .nav a::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border: 1px solid var(--sketch-border);
-            border-radius: 12px 6px 12px 6px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav a:hover::before {
-            opacity: 1;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 60px 0;
-            text-align: center;
-            position: relative;
-            background: rgba(255,255,255,0.3);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 3px dashed var(--ink-light);
-            border-radius: 20px 10px 25px 15px;
-            opacity: 0.4;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            transform: rotate(-0.8deg);
-            position: relative;
-        }
-
-        .hero h1::after {
-            content: '★';
-            position: absolute;
-            top: -10px;
-            right: -30px;
-            color: var(--highlight);
-            font-size: 24px;
-            transform: rotate(15deg);
-        }
-
-        .hero .tagline {
-            font-size: 24px;
-            color: var(--ink-medium);
-            margin-bottom: 30px;
-            transform: rotate(0.3deg);
-            font-family: 'Architects Daughter', cursive;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: var(--highlight);
-            color: white;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 600;
-            border-radius: 25px 15px 25px 15px;
-            border: 3px solid var(--sketch-border);
-            transform: rotate(-1deg);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .cta-button:hover {
-            transform: rotate(0deg) scale(1.05);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .cta-button::before {
-            content: '→';
-            position: absolute;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .cta-button:hover::before {
-            opacity: 1;
-        }
-
-        /* Categories Section */
-        .categories {
-            padding: 80px 0;
-            background: rgba(255,255,255,0.2);
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 50px;
-            position: relative;
-            transform: rotate(-0.5deg);
-        }
-
-        .section-title::before {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--highlight);
-            border-radius: 50%;
-        }
-
-        .section-title::after {
-            content: 'browse our collection';
-            position: absolute;
-            top: -20px;
-            right: -100px;
-            font-size: 12px;
-            color: var(--ink-light);
-            transform: rotate(8deg);
-            font-family: 'Architects Daughter', cursive;
-        }
-
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .category-card {
-            background: white;
-            padding: 30px 20px;
-            text-align: center;
-            border: 2px solid var(--sketch-border);
-            border-radius: 15px 8px 20px 12px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            transform: rotate(var(--card-rotate, 0deg));
-        }
-
-        .category-card:nth-child(1) { --card-rotate: 0.5deg; }
-        .category-card:nth-child(2) { --card-rotate: -0.3deg; }
-        .category-card:nth-child(3) { --card-rotate: 0.4deg; }
-        .category-card:nth-child(4) { --card-rotate: -0.2deg; }
-
-        .category-card:hover {
-            transform: rotate(0deg) translateY(-5px);
-            box-shadow: 0 10px 25px var(--shadow);
-            background: #fafafa;
-        }
-
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border: 1px dashed var(--ink-light);
-            border-radius: 12px 6px 15px 8px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .category-card:hover::before {
-            opacity: 1;
-        }
-
-        .category-icon {
-            font-size: 48px;
-            color: var(--highlight);
-            margin-bottom: 20px;
-            transform: rotate(-5deg);
-        }
-
-        .category-card h3 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            transform: rotate(0.3deg);
-        }
-
-        .category-count {
-            color: var(--ink-medium);
-            font-size: 16px;
-            font-family: 'Architects Daughter', cursive;
-            transform: rotate(-0.2deg);
-        }
-
-        /* Promotional Banner */
-        .promo-banner {
-            background: var(--highlight);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            margin: 60px 0;
-            border: 3px solid var(--sketch-border);
-            border-radius: 20px 8px 25px 12px;
-            position: relative;
-            transform: rotate(-0.3deg);
-        }
-
-        .promo-banner::before {
-            content: 'LIMITED TIME!';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: var(--sketch-border);
-            color: white;
-            padding: 5px 15px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 10px;
-            transform: rotate(-8deg);
-        }
-
-        .promo-banner h2 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            transform: rotate(0.5deg);
-        }
-
-        .promo-code {
-            background: white;
-            color: var(--ink-dark);
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-weight: bold;
-            display: inline-block;
-            margin-top: 15px;
-            border: 2px dashed var(--sketch-border);
-            transform: rotate(-0.8deg);
-        }
-
-        /* Testimonials */
-        .testimonials {
-            padding: 80px 0;
-            background: rgba(255,255,255,0.3);
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .testimonial {
-            background: white;
-            padding: 25px;
-            border: 2px solid var(--sketch-border);
-            border-radius: 20px 8px 15px 25px;
-            position: relative;
-            transform: rotate(var(--testimonial-rotate, 0deg));
-        }
-
-        .testimonial:nth-child(1) { --testimonial-rotate: 0.4deg; }
-        .testimonial:nth-child(2) { --testimonial-rotate: -0.6deg; }
-        .testimonial:nth-child(3) { --testimonial-rotate: 0.3deg; }
-
-        .testimonial::before {
-            content: '💬';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            font-size: 24px;
-            background: white;
-            border-radius: 50%;
-            padding: 5px;
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 15px;
-            font-family: 'Architects Daughter', cursive;
-            transform: rotate(-0.2deg);
-        }
-
-        .testimonial-author {
-            font-weight: 600;
-            color: var(--ink-medium);
-        }
-
-        .stars {
-            color: var(--highlight);
-            margin: 10px 0;
-            transform: rotate(0.5deg);
-        }
-
-        /* Newsletter */
-        .newsletter {
-            background: rgba(255,255,255,0.5);
-            padding: 60px 0;
-            text-align: center;
-            border-top: 3px dashed var(--ink-light);
-            border-bottom: 3px dashed var(--ink-light);
-        }
-
-        .newsletter-form {
-            max-width: 500px;
-            margin: 30px auto 0;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .newsletter-input {
-            flex: 1;
-            min-width: 250px;
-            padding: 15px;
-            border: 2px solid var(--sketch-border);
-            border-radius: 20px 8px 20px 8px;
-            font-family: 'Kalam', cursive;
-            font-size: 16px;
-            transform: rotate(0.3deg);
-        }
-
-        .newsletter-btn {
-            padding: 15px 25px;
-            background: var(--highlight);
-            color: white;
-            border: 2px solid var(--sketch-border);
-            border-radius: 20px 8px 20px 8px;
-            font-family: 'Kalam', cursive;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transform: rotate(-0.5deg);
-            transition: all 0.3s ease;
-        }
-
-        .newsletter-btn:hover {
-            transform: rotate(0deg) scale(1.05);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--ink-dark);
-            color: white;
-            padding: 60px 0 30px;
-            position: relative;
-        }
-
-        .footer::before {
-            content: 'end of sketch';
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 12px;
-            opacity: 0.5;
-            transform: rotate(3deg);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: var(--highlight);
-            transform: rotate(-0.5deg);
-            position: relative;
-        }
-
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background: var(--highlight);
-            border-radius: 50%;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section li {
-            margin-bottom: 8px;
-            transform: rotate(var(--link-rotate, 0deg));
-        }
-
-        .footer-section li:nth-child(odd) { --link-rotate: 0.2deg; }
-        .footer-section li:nth-child(even) { --link-rotate: -0.1deg; }
-
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--highlight);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px dashed #666;
-            color: #999;
-            transform: rotate(0.1deg);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-            
-            .hero .tagline {
-                font-size: 18px;
-            }
-            
-            .section-title {
-                font-size: 28px;
-            }
-            
-            .categories-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 20px;
-            }
-            
-            .nav ul {
-                gap: 20px;
-            }
-            
-            .header .container {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .search-container {
-                max-width: 100%;
-                margin: 20px 0;
-            }
-            
-            .newsletter-form {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .newsletter-input {
-                min-width: 100%;
-            }
-        }
-
-        /* Sketch Annotations */
-        .sketch-note {
-            position: absolute;
-            font-size: 11px;
-            color: var(--ink-light);
-            font-family: 'Architects Daughter', cursive;
-            transform: rotate(var(--note-rotate, 5deg));
-        }
-
-        /* Product Grid (if needed) */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .product-sketch {
-            background: white;
-            padding: 20px;
-            border: 2px dashed var(--sketch-border);
-            border-radius: 8px;
-            text-align: center;
-            transform: rotate(var(--product-rotate, 0deg));
-            transition: all 0.3s ease;
-        }
-
-        .product-sketch:nth-child(odd) { --product-rotate: 0.5deg; }
-        .product-sketch:nth-child(even) { --product-rotate: -0.3deg; }
-
-        .product-sketch:hover {
-            transform: rotate(0deg) scale(1.02);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 120px;
-            background: #f5f5f5;
-            border: 1px solid var(--ink-light);
-            border-radius: 4px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: var(--ink-light);
-            transform: rotate(-1deg);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GHOST WALA — Luxurious Store (Template)</title>
+  <meta name="description" content="GHOST WALA — Luxurious e‑commerce template for clothes, shoes, home decor, jewelry." />
+  <style>
+    :root{
+      --bg:#0f0f10; --card:#121214; --muted:#9aa0a6; --accent:#cfa46b; --white:#f6f5f3;
+      --glass: rgba(255,255,255,0.03);
+      --max:1200px;
+      --radius:16px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:linear-gradient(180deg,#0b0b0c 0%, #0f1112 100%);color:var(--white);-webkit-font-smoothing:antialiased;
+      line-height:1.4;padding:32px;display:flex;justify-content:center;
+    }
+    .container{width:100%;max-width:var(--max)}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .brand{display:flex;gap:16px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7b5a2b);display:flex;align-items:center;justify-content:center;font-weight:700;color:#111}
+    .brand h1{margin:0;font-family:'Playfair Display', serif;font-size:20px;letter-spacing:0.6px}
+    nav{display:flex;gap:12px;align-items:center}
+    .nav-link{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px}
+    .nav-link:hover{color:var(--white);background:rgba(255,255,255,0.03)}
+
+    /* Hero */
+    .hero{background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);padding:28px;border-radius:var(--radius);display:flex;gap:24px;align-items:center}
+    .hero-left{flex:1}
+    .kicker{color:var(--accent);font-weight:600;letter-spacing:1px}
+    h2{font-family:'Playfair Display', serif;font-size:36px;margin:8px 0}
+    p.lead{color:var(--muted);max-width:600px}
+    .cta{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:var(--accent);color:#111;text-decoration:none;font-weight:600}
+
+    .hero-right{width:420px;height:260px;border-radius:12px;overflow:hidden;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="%230f0f10"/></svg>');display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.03)}
+
+    /* Product grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+    .card{background:var(--card);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);overflow:hidden}
+    .product-img{height:220px;display:block;background:#222;border-radius:8px;margin-bottom:12px;position:relative;overflow:hidden}
+    .product-img img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .title{font-weight:600}
+    .price{color:var(--accent);font-weight:700}
+    .actions{display:flex;gap:8px;margin-top:10px}
+    button{cursor:pointer;padding:8px 12px;border-radius:10px;border:0;background:rgba(255,255,255,0.02);color:var(--white)}
+    button.primary{background:var(--accent);color:#111}
+
+    /* Cart drawer */
+    .cart-drawer{position:fixed;right:20px;bottom:20px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.04);min-width:280px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+
+    /* Admin toggles */
+    .admin-badge{background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:600;color:var(--muted)}
+    .admin-panel{margin-top:18px;padding:12px;background:var(--glass);border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+    .field{display:flex;flex-direction:column;margin-bottom:8px}
+    input,textarea,select{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white)}
+
+    /* modal */
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6)}
+    .modal.open{display:flex}
+    .modal-card{width:90%;max-width:920px;background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);display:flex;gap:20px}
+
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .hero{flex-direction:column}
+      .hero-right{width:100%;height:200px}
+    }
+    @media (max-width:600px){.grid{grid-template-columns:1fr}.container{padding:0 12px}}
+
+    /* tiny helpers */
+    .muted{color:var(--muted);font-size:13px}
+  </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="contact-info">
-                <span><i class="fas fa-shipping-fast"></i> Free shipping on orders over ₹999</span>
-            </div>
-            <div class="sketch-note" style="--note-rotate: -3deg; top: 2px; right: 200px;">contact details</div>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">GW</div>
+        <div>
+          <h1>GHOST WALA</h1>
+          <div class="muted">Luxury · Curated · Timeless</div>
         </div>
-    </div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <a href="#" class="logo">Ghost Wala</a>
-            
-            <div class="search-container">
-                <input type="text" class="search-box" placeholder="Search products...">
-                <button class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-                <div class="sketch-note" style="--note-rotate: 8deg; top: -15px; left: 50px;">search functionality</div>
-            </div>
-            
-            <div class="cart-section">
-                <div class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">3</span>
-                </div>
-                <div class="sketch-note" style="--note-rotate: -12deg; top: -10px; right: -30px;">shopping cart</div>
-            </div>
-        </div>
+      </div>
+      <nav>
+        <a class="nav-link" href="#categories">Collections</a>
+        <a class="nav-link" href="#best">Best Sellers</a>
+        <a class="nav-link" href="#contact">Contact</a>
+        <a class="nav-link" id="loginBtn" href="#">Customer</a>
+        <a class="nav-link" id="adminToggle" href="#">Admin</a>
+      </nav>
     </header>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="container">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">Categories</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Premium Online Shopping</h1>
-                <p class="tagline">Discover our new arrivals with up to 40% discount</p>
-                <a href="#" class="cta-button">Start Shopping</a>
-                <div class="sketch-note" style="--note-rotate: 15deg; top: 20px; left: 20px;">main call to action</div>
-                <div class="sketch-note" style="--note-rotate: -8deg; bottom: 30px; right: 30px;">hero banner area</div>
-            </div>
-        </div>
+      <div class="hero-left">
+        <div class="kicker">NEW ARRIVALS</div>
+        <h2>Timeless pieces for modern living</h2>
+        <p class="lead">Discover curated clothing, elegant jewelry, statement home decor, and refined footwear. GHOST WALA blends heritage craftsmanship with contemporary style.</p>
+        <a class="cta" href="#best">Shop the Collection</a>
+      </div>
+      <div class="hero-right" aria-hidden="true">
+        <!-- Placeholder: swap with product hero image -->
+      </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="categories">
-        <div class="container">
-            <h2 class="section-title">Shop by Category</h2>
-            
-            <div class="categories-grid">
-                <div class="category-card" onclick="filterProducts('electronics')">
-                    <div class="category-icon">
-                        <i class="fas fa-laptop"></i>
-                    </div>
-                    <h3>Electronics</h3>
-                    <p class="category-count">50+ Products</p>
-                    <div class="sketch-note" style="--note-rotate: 12deg; bottom: -10px; left: 10px;">tech items</div>
-                </div>
-                
-                <div class="category-card" onclick="filterProducts('fashion')">
-                    <div class="category-icon">
-                        <i class="fas fa-tshirt"></i>
-                    </div>
-                    <h3>Fashion</h3>
-                    <p class="category-count">120+ Products</p>
-                    <div class="sketch-note" style="--note-rotate: -5deg; bottom: -10px; right: 5px;">clothing &amp; style</div>
-                </div>
-                
-                <div class="category-card" onclick="filterProducts('home')">
-                    <div class="category-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3>Home &amp; Garden</h3>
-                    <p class="category-count">75+ Products</p>
-                    <div class="sketch-note" style="--note-rotate: 7deg; bottom: -10px; left: 15px;">house stuff</div>
-                </div>
-                
-                <div class="category-card" onclick="filterProducts('books')">
-                    <div class="category-icon">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <h3>Books</h3>
-                    <p class="category-count">90+ Products</p>
-                    <div class="sketch-note" style="--note-rotate: -10deg; bottom: -10px; right: 10px;">reading material</div>
-                </div>
-            </div>
-            
-            <div class="sketch-note" style="--note-rotate: -15deg; top: 100px; left: 50px;">category navigation</div>
-        </div>
+    <section id="best">
+      <h3 style="margin-top:22px">Featured</h3>
+      <div class="grid" id="productGrid">
+        <!-- product cards injected by JS -->
+      </div>
     </section>
 
-    <!-- Sample Products Section -->
-    <section class="categories" style="background: rgba(255,255,255,0.1);">
-        <div class="container">
-            <h2 class="section-title">Featured Products</h2>
-            
-            <div class="products-grid">
-                <div class="product-sketch">
-                    <div class="product-image">Product Sketch</div>
-                    <h4>Sample Product 1</h4>
-                    <p>$29.99</p>
-                    <div class="sketch-note" style="--note-rotate: 8deg; bottom: -5px; right: 5px;">price tag</div>
-                </div>
-                
-                <div class="product-sketch">
-                    <div class="product-image">Product Sketch</div>
-                    <h4>Sample Product 2</h4>
-                    <p>$49.99</p>
-                    <div class="sketch-note" style="--note-rotate: -12deg; bottom: -5px; left: 5px;">bestseller</div>
-                </div>
-                
-                <div class="product-sketch">
-                    <div class="product-image">Product Sketch</div>
-                    <h4>Sample Product 3</h4>
-                    <p>$19.99</p>
-                    <div class="sketch-note" style="--note-rotate: 15deg; bottom: -5px; right: 0px;">on sale</div>
-                </div>
-                
-                <div class="product-sketch">
-                    <div class="product-image">Product Sketch</div>
-                    <h4>Sample Product 4</h4>
-                    <p>$39.99</p>
-                    <div class="sketch-note" style="--note-rotate: -6deg; bottom: -5px; left: 10px;">new arrival</div>
-                </div>
+    <!-- Cart drawer -->
+    <div class="cart-drawer" id="cartDrawer">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">Cart</div>
+        <div class="muted" id="cartCount">0 items</div>
+      </div>
+      <div id="cartItems" style="margin-top:8px;max-height:220px;overflow:auto"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <div class="muted" id="cartTotal">₹0</div>
+        <button class="primary" id="checkoutBtn">Checkout</button>
+      </div>
+    </div>
+
+    <!-- Admin panel (hidden until admin toggled) -->
+    <div id="adminPanel" class="admin-panel" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:700">Admin Panel</div>
+        <div class="admin-badge">Signed in as admin</div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="field"><label>Name</label><input id="pTitle" placeholder="Product title"></div>
+        <div class="field"><label>Price (₹)</label><input id="pPrice" type="number" placeholder="Price"></div>
+        <div class="field"><label>Image URL</label><input id="pImage" placeholder="https://..."></div>
+        <div style="display:flex;gap:8px"><button id="addProduct">Add Product</button><button id="clearProducts">Clear All</button></div>
+      </div>
+    </div>
+
+    <!-- Modal product quick view -->
+    <div class="modal" id="productModal" aria-hidden="true">
+      <div class="modal-card">
+        <div style="flex:1">
+          <div id="modalImg" style="height:380px;background:#111;border-radius:8px;overflow:hidden"></div>
+        </div>
+        <div style="flex:1.1">
+          <div style="display:flex;justify-content:space-between;align-items:start">
+            <div>
+              <h2 id="modalTitle">Product title</h2>
+              <div class="muted" id="modalDesc">Short description</div>
             </div>
-            
-            <div class="sketch-note" style="--note-rotate: 12deg; top: 120px; right: 30px;">product showcase</div>
-        </div>
-    </section>
-
-    <!-- Promotional Banner -->
-    <section class="promo-banner">
-        <div class="container">
-            <h2>Get 30% off on all products this weekend only</h2>
-            <div class="promo-code">Use code: WEEKEND30</div>
-            <div class="sketch-note" style="--note-rotate: -20deg; top: 10px; right: 100px; color: white;">promotional offer</div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <h2 class="section-title">What Our Customers Say</h2>
-            
-            <div class="testimonials-grid">
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Amazing quality and fast shipping!"</p>
-                    <div class="testimonial-author">- Sarah Johnson, Verified Buyer</div>
-                    <div class="sketch-note" style="--note-rotate: 15deg; bottom: -10px; right: 10px;">happy customer</div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Best online shopping experience!"</p>
-                    <div class="testimonial-author">- Mike Chen, Verified Buyer</div>
-                    <div class="sketch-note" style="--note-rotate: -8deg; bottom: -10px; left: 5px;">5 star review</div>
-                </div>
-                
-                <div class="testimonial">
-                    <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Great customer service and products!"</p>
-                    <div class="testimonial-author">- Emma Davis, Verified Buyer</div>
-                    <div class="sketch-note" style="--note-rotate: 12deg; bottom: -10px; right: 0px;">testimonial</div>
-                </div>
+            <div style="text-align:right">
+              <div class="price" id="modalPrice">₹0</div>
+              <div class="muted">In stock</div>
             </div>
-            
-            <div class="sketch-note" style="--note-rotate: -10deg; top: 80px; left: 100px;">customer feedback section</div>
+          </div>
+          <div style="margin-top:14px">
+            <label>Quantity</label>
+            <select id="modalQty"><option>1</option><option>2</option><option>3</option></select>
+            <div style="margin-top:12px"><button class="primary" id="modalAdd">Add to cart</button> <button id="modalClose">Close</button></div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Newsletter Signup -->
-    <section class="newsletter">
-        <div class="container">
-            <h2 class="section-title">Stay Updated</h2>
-            <p>Get the latest updates on new products, exclusive offers, and more!</p>
-            
-            <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-                <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
-                <button type="submit" class="newsletter-btn">Subscribe</button>
-            </form>
-            
-            <div class="sketch-note" style="--note-rotate: 18deg; top: 40px; right: 50px;">email signup form</div>
-        </div>
-    </section>
+  </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Size Guide</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Categories</h3>
-                    <ul>
-                        <li><a href="#">Electronics</a></li>
-                        <li><a href="#">Fashion</a></li>
-                        <li><a href="#">Home &amp; Garden</a></li>
-                        <li><a href="#">Books</a></li>
-                        <li><a href="#">Sports</a></li>
-                        <li><a href="#">Beauty</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Customer Service</h3>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Track Order</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Size Guide</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Connect With Us</h3>
-                    <ul>
-                        <li><a href="#">📱 Follow on Social</a></li>
-                        <li><a href="#">📧 Email Newsletter</a></li>
-                        <li><a href="#">💬 Live Chat</a></li>
-                        <li><a href="#">📞 Phone Support</a></li>
-                    </ul>
-                    <div class="sketch-note" style="--note-rotate: -15deg; bottom: 10px; left: 20px; color: #999;">social links</div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 ShopNest - Hand-Drawn E-commerce Concept. All rights reserved.</p>
-                <div class="sketch-note" style="--note-rotate: 5deg; bottom: -5px; right: 50px; color: #666;">copyright notice</div>
-            </div>
-        </div>
-    </footer>
+  <script>
+    // --- Sample data & utilities ---
+    const sampleProducts = [
+      {id:1,title:'Silk Evening Gown',price:12999,image:'https://images.unsplash.com/photo-1520975921306-8c4e7c4b8a8e?auto=format&fit=crop&w=800&q=60',desc:'Hand-finished silk gown.'},
+      {id:2,title:'Artisan Vase',price:7499,image:'https://images.unsplash.com/photo-1549187774-b4e9a4b7c8a1?auto=format&fit=crop&w=800&q=60',desc:'Stoneware vase, handcrafted.'},
+      {id:3,title:'Leather Oxfords',price:8999,image:'https://images.unsplash.com/photo-1526178617521-7f6b4a0c2d77?auto=format&fit=crop&w=800&q=60',desc:'Full-grain calf leather.'},
+      {id:4,title:'Gold Pendant',price:15999,image:'https://images.unsplash.com/photo-1537202108838-2b2ed2d2d8b6?auto=format&fit=crop&w=800&q=60',desc:'14k gold pendant with diamond.'},
+      {id:5,title:'Linen Throw',price:2999,image:'https://images.unsplash.com/photo-1505691723518-36a0d8b9d5a6?auto=format&fit=crop&w=800&q=60',desc:'Linen throw for living spaces.'},
+      {id:6,title:'Silk Scarf',price:2499,image:'https://images.unsplash.com/photo-1519741498740-4d9a9b4f5d1c?auto=format&fit=crop&w=800&q=60',desc:'Hand-printed silk scarf.'}
+    ];
 
-    <script>
-        // Search functionality
-        document.querySelector('.search-box').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch(this.value);
-            }
-        });
+    // localStorage keys
+    const KEY_PRODUCTS = 'gw_products_v1';
+    const KEY_CART = 'gw_cart_v1';
+    const KEY_ADMIN = 'gw_admin';
 
-        document.querySelector('.search-btn').addEventListener('click', function() {
-            const searchValue = document.querySelector('.search-box').value;
-            performSearch(searchValue);
-        });
+    // --- State management (very small session manager) ---
+    function loadProducts(){
+      const raw = localStorage.getItem(KEY_PRODUCTS);
+      if(raw) return JSON.parse(raw);
+      localStorage.setItem(KEY_PRODUCTS, JSON.stringify(sampleProducts));
+      return sampleProducts;
+    }
+    function saveProducts(list){ localStorage.setItem(KEY_PRODUCTS, JSON.stringify(list)); }
 
-        function performSearch(query) {
-            if (query.trim()) {
-                alert(`Searching for: ${query}\n\n(This would normally filter products or redirect to search results)`);
-                console.log('Search performed for:', query);
-            }
-        }
+    function loadCart(){
+      const raw = localStorage.getItem(KEY_CART);
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveCart(cart){ localStorage.setItem(KEY_CART, JSON.stringify(cart)); renderCart(); }
 
-        // Category filtering
-        function filterProducts(category) {
-            const categoryNames = {
-                'electronics': 'Electronics',
-                'fashion': 'Fashion',
-                'home': 'Home & Garden',
-                'books': 'Books'
-            };
-            
-            alert(`Filtering products by: ${categoryNames[category]}\n\n(This would normally show filtered product results)`);
-            console.log('Category filter applied:', category);
-        }
+    function isAdmin(){ return localStorage.getItem(KEY_ADMIN) === '1'; }
+    function setAdmin(val){ localStorage.setItem(KEY_ADMIN, val ? '1' : '0'); renderAdminPanel(); }
 
-        // Newsletter signup
-        function handleNewsletter(event) {
-            event.preventDefault();
-            const email = event.target.querySelector('.newsletter-input').value;
-            
-            if (email) {
-                alert(`Thank you for subscribing!\n\nEmail: ${email}\n\n(This would normally add the email to your newsletter list)`);
-                event.target.reset();
-                console.log('Newsletter signup:', email);
-            }
-        }
-
-        // Shopping cart functionality
-        document.querySelector('.cart-icon').addEventListener('click', function() {
-            alert('Shopping Cart\n\n• Product 1 - $29.99\n• Product 2 - $49.99\n• Product 3 - $19.99\n\nTotal: $98.97\n\n(This would normally open the cart sidebar or page)');
-            console.log('Cart opened');
-        });
-
-        // Add some interactive sketch effects
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add random slight rotations to sketch notes on hover
-            const sketchNotes = document.querySelectorAll('.sketch-note');
-            sketchNotes.forEach(note => {
-                note.addEventListener('mouseenter', function() {
-                    const randomRotation = (Math.random() - 0.5) * 10;
-                    this.style.transform += ` rotate(${randomRotation}deg)`;
-                });
-                
-                note.addEventListener('mouseleave', function() {
-                    this.style.transform = this.style.transform.replace(/rotate\([^)]+\)/g, '');
-                });
-            });
-
-            // Add sketch effect to product cards
-            const productCards = document.querySelectorAll('.product-sketch');
-            productCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    alert('Product Details\n\n(This would normally open the product detail page with full information, reviews, and purchase options)');
-                });
-            });
-
-            // Animate cart count occasionally
-            setInterval(() => {
-                const cartCount = document.querySelector('.cart-count');
-                cartCount.style.animation = 'none';
-                setTimeout(() => {
-                    cartCount.style.animation = 'pulse 0.5s ease-in-out';
-                }, 10);
-            }, 10000);
-        });
-
-        // Add CSS animation for cart pulse
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.2); }
-                100% { transform: scale(1); }
-            }
+    // --- Render UI ---
+    const grid = document.getElementById('productGrid');
+    function renderProducts(){
+      const products = loadProducts();
+      grid.innerHTML = '';
+      products.forEach(p=>{
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `
+          <div class="product-img"><img src="${p.image}" alt="${p.title}"></div>
+          <div class="meta"><div class="title">${p.title}</div><div class="price">₹${p.price.toLocaleString()}</div></div>
+          <div class="muted">${p.desc}</div>
+          <div class="actions"><button data-id="${p.id}" class="viewBtn">Quick view</button><button class="primary" data-id="${p.id}">Add to cart</button></div>
         `;
-        document.head.appendChild(style);
+        grid.appendChild(card);
+      });
+    }
 
-        // Add some random sketch elements dynamically
-        function addSketchDoodles() {
-            const doodles = ['✓', '→', '★', '♡', '⚡', '◆', '◇', '○', '□'];
-            const container = document.body;
-            
-            for (let i = 0; i < 5; i++) {
-                const doodle = document.createElement('div');
-                doodle.textContent = doodles[Math.floor(Math.random() * doodles.length)];
-                doodle.style.position = 'fixed';
-                doodle.style.left = Math.random() * window.innerWidth + 'px';
-                doodle.style.top = Math.random() * window.innerHeight + 'px';
-                doodle.style.fontSize = '12px';
-                doodle.style.color = 'rgba(42, 42, 42, 0.1)';
-                doodle.style.pointerEvents = 'none';
-                doodle.style.zIndex = '-1';
-                doodle.style.transform = `rotate(${Math.random() * 360}deg)`;
-                
-                container.appendChild(doodle);
-                
-                // Remove after 5 seconds
-                setTimeout(() => {
-                    if (doodle.parentNode) {
-                        doodle.parentNode.removeChild(doodle);
-                    }
-                }, 5000);
-            }
-        }
+    // cart rendering
+    function renderCart(){
+      const cart = loadCart();
+      const cartItems = document.getElementById('cartItems');
+      const cartCount = document.getElementById('cartCount');
+      const cartTotal = document.getElementById('cartTotal');
+      cartItems.innerHTML = '';
+      let total=0; let qty=0;
+      cart.forEach(item=>{
+        const el = document.createElement('div'); el.style.display='flex'; el.style.justifyContent='space-between'; el.style.marginBottom='8px';
+        el.innerHTML = `<div>${item.title} x ${item.qty}</div><div>₹${(item.price*item.qty).toLocaleString()}</div>`;
+        cartItems.appendChild(el);
+        total += item.price*item.qty; qty+=item.qty;
+      });
+      cartCount.textContent = qty + (qty===1 ? ' item' : ' items');
+      cartTotal.textContent = '₹' + total.toLocaleString();
+    }
 
-        // Add doodles occasionally
-        setInterval(addSketchDoodles, 15000);
-        
-        // Initial doodles
-        setTimeout(addSketchDoodles, 2000);
-    </script>
+    // add to cart
+    function addToCart(productId, quantity=1){
+      const products = loadProducts();
+      const p = products.find(x=>x.id==productId); if(!p) return;
+      const cart = loadCart();
+      const existing = cart.find(i=>i.id==productId);
+      if(existing) existing.qty += quantity; else cart.push({id:p.id,title:p.title,price:p.price,qty:quantity});
+      saveCart(cart);
+    }
+
+    // --- Modal / quick view ---
+    const modal = document.getElementById('productModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalQty = document.getElementById('modalQty');
+    let currentModalId = null;
+
+    function openModal(id){
+      const p = loadProducts().find(x=>x.id==id);
+      if(!p) return;
+      currentModalId = id;
+      modalImg.innerHTML = `<img src='${p.image}' style='width:100%;height:100%;object-fit:cover'>`;
+      modalTitle.textContent = p.title;
+      modalDesc.textContent = p.desc;
+      modalPrice.textContent = '₹' + p.price.toLocaleString();
+      modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+
+    document.addEventListener('click', (e)=>{
+      // view buttons
+      if(e.target.matches('.viewBtn')){ openModal(e.target.dataset.id); }
+      if(e.target.matches('.card .primary')){ addToCart(e.target.dataset.id*1,1); }
+    });
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalAdd').addEventListener('click', ()=>{ addToCart(currentModalId, Number(modalQty.value)); closeModal(); });
+
+    // checkout (demo)
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+      const cart = loadCart(); if(cart.length===0){ alert('Cart is empty'); return; }
+      alert('This is a demo. Integrate Stripe backend for real checkout.');
+    });
+
+    // admin toggle & actions
+    document.getElementById('adminToggle').addEventListener('click', (e)=>{ e.preventDefault(); const asAdmin = !isAdmin(); setAdmin(asAdmin); });
+    function renderAdminPanel(){ const panel = document.getElementById('adminPanel'); panel.style.display = isAdmin() ? 'block' : 'none'; document.getElementById('adminToggle').textContent = isAdmin() ? 'Sign out admin' : 'Admin'; }
+
+    document.getElementById('addProduct').addEventListener('click', ()=>{
+      const title = document.getElementById('pTitle').value.trim();
+      const price = Number(document.getElementById('pPrice').value);
+      const image = document.getElementById('pImage').value.trim();
+      if(!title||!price){ alert('Provide title and price'); return; }
+      const products = loadProducts();
+      const id = Date.now();
+      products.unshift({id,title,price,image: image || 'https://images.unsplash.com/photo-1519741498740-4d9a9b4f5d1c?auto=format&fit=crop&w=800&q=60',desc:'New product'});
+      saveProducts(products); renderProducts();
+      document.getElementById('pTitle').value=''; document.getElementById('pPrice').value=''; document.getElementById('pImage').value='';
+    });
+
+    document.getElementById('clearProducts').addEventListener('click', ()=>{ if(confirm('Clear all custom products?')){ localStorage.removeItem(KEY_PRODUCTS); renderProducts(); } });
+
+    // login simulation: customer
+    document.getElementById('loginBtn').addEventListener('click', (e)=>{ e.preventDefault(); alert('This template uses local demo sessions. Implement real auth with backend.'); });
+
+    // initial render
+    renderAdminPanel(); renderProducts(); renderCart();
+
+    // Accessibility: close modal with escape
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+  </script>
 </body>
 </html>
